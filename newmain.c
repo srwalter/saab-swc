@@ -72,10 +72,15 @@ void main(void) {
     // All PORTC as output
     TRISC = 0;
     
+    // RB1 as output
+    PORTBbits.RB1 = 1;
+    TRISBbits.TRISB1 = 0;
+    
     while (1) {
         data = read_byte();
         
-        // XXX turn on LED
         PORTC = data;
+        // Toggle LED
+        PORTBbits.RB1 ^= 1;
     }
 }
