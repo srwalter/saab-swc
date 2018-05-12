@@ -49,7 +49,7 @@ char read_byte(void) {
     wait_idle();
     
     // Wait for start bit
-    while (RA1 == 0);
+    while (RA1 == 1);
     
     // Delay for 1/3 bit time (1/2 is ideal but assume there's some delay on the start bit)
     // 9600 baud = 104uS bit time; so 35uS
