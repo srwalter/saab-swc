@@ -33,7 +33,7 @@ restart:
     MOVLW       0xff
     MOVWF       _idle_counter
 loop:
-    BTFSC       PORTA,1
+    BTFSS       PORTA,1
     GOTO        restart
     DECF        _idle_counter
     BTFSS       STATUS,2
