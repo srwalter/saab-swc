@@ -47,34 +47,38 @@ char read_byte(void) {
     
     // Wait for roughly 9 idle times for sync
     wait_idle();
+    PORTBbits.RB1 ^= 1;
     
     // Wait for start bit
     while (RA1 == 1);
+    PORTBbits.RB1 ^= 1;
     
     // Delay for 1/3 bit time (1/2 is ideal but assume there's some delay on the start bit)
     // 9600 baud = 104uS bit time; so 35uS
     __delay_us(35);
+    // Now we're in the middle of the start bit, so delay a full bit time to get the first data bit
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 2
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 3
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 4
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 5
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 6
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 7
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     // Bit 8
-    __delay_us(35);
+    __delay_us(104);
     data = (data << 1) | RA1;
     
     return data;
@@ -101,7 +105,5 @@ void main(void) {
         data = read_byte();
         
         PORTC = data;
-        // Toggle LED
-        PORTBbits.RB1 ^= 1;
     }
 }
