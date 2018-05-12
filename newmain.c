@@ -5,23 +5,27 @@
  * Created on May 12, 2018, 7:51 AM
  */
 
+// PIC16F913 Configuration Bit Settings
+
+// 'C' source line config statements
+
+// CONFIG
+#pragma config FOSC = INTOSCIO  // Oscillator Selection bits (INTOSCIO oscillator: I/O function on RA6/OSC2/CLKOUT/T1OSO pin, I/O function on RA7/OSC1/CLKIN/T1OSI)
+#pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled and can be enabled by SWDTEN bit of the WDTCON register)
+#pragma config PWRTE = OFF      // Power Up Timer Enable bit (PWRT disabled)
+#pragma config MCLRE = ON       // RE3/MCLR pin function select bit (RE3/MCLR pin function is MCLR)
+#pragma config CP = OFF         // Code Protection bit (Program memory code protection is disabled)
+#pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
+#pragma config BOREN = ON       // Brown-out Reset Selection bits (BOR enabled)
+#pragma config IESO = ON        // Internal External Switchover bit (Internal/External Switchover mode is enabled)
+#pragma config FCMEN = ON       // Fail-Safe Clock Monitor Enabled bit (Fail-Safe Clock Monitor is enabled)
 
 #include <xc.h>
 
 #define _XTAL_FREQ 4000000
 
-void main(void) {
+char read_byte(void) {
     unsigned char data = 0;
-    
-    // AN1/RA1 to digital input
-    ANSELbits.ANS1 = 0;
-    // Comparators off, CxIN pins to digital I/O
-    CMCON0 = 7;
-    // Disable LCD inputs, PORTC to digital I/O
-    LCDCON = 0;
-    PORTC = 0;
-    // All PORTC as output
-    TRISC = 0;
     
     // Wait for start bit
     while (RA1 == 0);
@@ -52,6 +56,26 @@ void main(void) {
     __delay_us(35);
     data = (data << 1) | RA1;
     
-    // XXX turn on LED
-    PORTC = data;
+    return data;
+}
+
+void main(void) {
+    unsigned char data;
+    
+    // AN1/RA1 to digital input
+    ANSELbits.ANS1 = 0;
+    // Comparators off, CxIN pins to digital I/O
+    CMCON0 = 7;
+    // Disable LCD inputs, PORTC to digital I/O
+    LCDCON = 0;
+    PORTC = 0;
+    // All PORTC as output
+    TRISC = 0;
+    
+    while (1) {
+        data = read_byte();
+        
+        // XXX turn on LED
+        PORTC = data;
+    }
 }
