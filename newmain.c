@@ -24,8 +24,29 @@
 
 #define _XTAL_FREQ 4000000
 
+static idle_counter;
+
+void wait_idle(void) {
+#asm
+    BANKSEL     (PORTA)
+restart:
+    MOVLW       0xff
+    MOVWF       _idle_counter
+loop:
+    BTFSC       PORTA,1
+    GOTO        restart
+    DECF        _idle_counter
+    BTFSS       STATUS,2
+    GOTO        loop
+    NOP
+#endasm
+}
+
 char read_byte(void) {
     unsigned char data = 0;
+    
+    // Wait for roughly 9 idle times for sync
+    wait_idle();
     
     // Wait for start bit
     while (RA1 == 0);
