@@ -57,29 +57,37 @@ char read_byte(void) {
     // 9600 baud = 104uS bit time; so 35uS
     __delay_us(35);
     // Now we're in the middle of the start bit, so delay a full bit time to get the first data bit
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 1;
     // Bit 2
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 2;
     // Bit 3
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 4;
     // Bit 4
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 8;
     // Bit 5
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 16;
     // Bit 6
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 32;
     // Bit 7
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 64;
     // Bit 8
-    __delay_us(104);
-    data = (data << 1) | RA1;
+    __delay_us(100);
+    if (RA1)
+        data |= 128;    
     
     return data;
 }
