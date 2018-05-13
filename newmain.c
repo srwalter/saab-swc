@@ -102,16 +102,56 @@ void main(void) {
     // Disable LCD inputs, PORTC to digital I/O
     LCDCON = 0;
     PORTC = 0;
-    // All PORTC as output
-    TRISC = 0;
+    // Tristate PORTC (infinite resistance))
+    TRISC = 0xff;
     
     // RB1 as output
     PORTBbits.RB1 = 1;
     TRISBbits.TRISB1 = 0;
     
+    // RC0 = 80k
+    // RC1 = 2k
+    // RC2 = 2.8k
+    // RC3 = RING        
+    // RC4 = 8.9k
+    // RC5 = 11.8k
+    // RC6 = 16k
+    // RC7 = 24k
+    
     while (1) {
         data = read_byte();
+        switch (data) {
+            case 1:
+                // Answer
+                // 80k + Ring to ground
+                TRISC = ~(1 << 0) & ~(1 << 3);
+                break;
+                
+            case 2:
+                // VolUp
+                TRISC = ~(1 << 6);
+                break;
+                
+            case 3:
+                // VolDown
+                TRISC = ~(1 << 7);
+                break;
+                
+            case 5:
+                // SeekUp
+                TRISC = ~(1 << 4);
+                break;
+                
+            case 6:
+                // SeekDown
+                TRISC = ~(1 << 5);
+                break;
+                
+            default:
+                // No keys, disconnect from ground (i.e. go output)
+                TRISC = 0xff;
+        }
         
-        PORTC = data;
+        //PORTC = data;
     }
 }
