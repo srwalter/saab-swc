@@ -123,8 +123,8 @@ void main(void) {
         switch (data) {
             case 1:
                 // Answer
-                // 80k + Ring to ground
-                TRISC = ~(1 << 0) & ~(1 << 3);
+                // 2.8k + Ring to ground
+                TRISC = ~(1 << 2) & ~(1 << 3);
                 break;
                 
             case 2:
